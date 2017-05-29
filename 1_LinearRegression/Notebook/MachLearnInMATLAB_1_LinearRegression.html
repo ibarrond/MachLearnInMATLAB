@@ -1,0 +1,448 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- saved from url=(0144)file:///C:/Users/AlbertoIbarrondo/Documents/MachineLearningInMATLAB/1_LinearRegression/SourceCode/html/MachLearnInMATLAB_1_LinearRegression.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Machine Learning implemented in MATLAB - Notebook 1: Linear Regression</title><meta name="generator" content="MATLAB 9.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-04-25"><meta name="DC.source" content="MachLearnInMATLAB_1_LinearRegression.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Machine Learning implemented in MATLAB - Notebook 1: Linear Regression</h1><!--introduction--><p><i>Author:</i> Alberto Ibarrondo | <i>Date:</i> 20/03/2017 | <i>License:</i> MIT Free software</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="file:///C:/Users/AlbertoIbarrondo/Documents/MachineLearningInMATLAB/1_LinearRegression/SourceCode/html/MachLearnInMATLAB_1_LinearRegression.html#1">1 INTRODUCTION</a></li><li><a href="file:///C:/Users/AlbertoIbarrondo/Documents/MachineLearningInMATLAB/1_LinearRegression/SourceCode/html/MachLearnInMATLAB_1_LinearRegression.html#2">2 LINEAR REGRESSION WITH ONE VARIABLE</a></li><li><a href="file:///C:/Users/AlbertoIbarrondo/Documents/MachineLearningInMATLAB/1_LinearRegression/SourceCode/html/MachLearnInMATLAB_1_LinearRegression.html#3">2.1: Loading &amp; Plotting</a></li><li><a href="file:///C:/Users/AlbertoIbarrondo/Documents/MachineLearningInMATLAB/1_LinearRegression/SourceCode/html/MachLearnInMATLAB_1_LinearRegression.html#4">2.2: Gradient Descent</a></li><li><a href="file:///C:/Users/AlbertoIbarrondo/Documents/MachineLearningInMATLAB/1_LinearRegression/SourceCode/html/MachLearnInMATLAB_1_LinearRegression.html#5">2.3: Visualizing J(theta_0, theta_1)</a></li><li><a href="file:///C:/Users/AlbertoIbarrondo/Documents/MachineLearningInMATLAB/1_LinearRegression/SourceCode/html/MachLearnInMATLAB_1_LinearRegression.html#6">3 LINEAR REGRESSION WITH MULTIPLE VARIABLES</a></li><li><a href="file:///C:/Users/AlbertoIbarrondo/Documents/MachineLearningInMATLAB/1_LinearRegression/SourceCode/html/MachLearnInMATLAB_1_LinearRegression.html#7">3.1 Feature Normalization</a></li><li><a href="file:///C:/Users/AlbertoIbarrondo/Documents/MachineLearningInMATLAB/1_LinearRegression/SourceCode/html/MachLearnInMATLAB_1_LinearRegression.html#8">3.2 Gradient Descent</a></li><li><a href="file:///C:/Users/AlbertoIbarrondo/Documents/MachineLearningInMATLAB/1_LinearRegression/SourceCode/html/MachLearnInMATLAB_1_LinearRegression.html#9">3.3 Normal Equations</a></li></ul></div><h2 id="1">1 INTRODUCTION</h2><p>The objective of this first notebook is to implement a Linear Regression model in MATLAB and apply it on a dataset.</p><p><b>Files included with this notebook</b></p><div><ul><li>MachLearnInMATLAB_1_LinearRegression.m - implementation MATLAB script</li><li>data1.txt - Dataset for linear regression with one variable</li><li>data2.txt - Dataset for linear regression with multiple variables</li><li>computeCost.m - Function to compute the cost of linear regression</li><li>gradientDescent.m - Function to run gradient descent</li><li>featureNormalize.m - Function to normalize features</li><li>normalEqn.m - Function to compute the normal equations</li></ul></div><h2 id="2">2 LINEAR REGRESSION WITH ONE VARIABLE</h2><h2 id="3">2.1: Loading &amp; Plotting</h2><p>x refers to the population size in 10,000s y refers to the profit in $10,000s</p><pre class="codeinput">clear ; close <span class="string">all</span>; clc
+fprintf(<span class="string">'1. Loading and Plotting Data ...\n'</span>)
+data = load(<span class="string">'data1.txt'</span>);
+X = data(:, 1); y = data(:, 2);
+m = length(y); <span class="comment">% number of training examples</span>
+
+<span class="comment">% Plot Data</span>
+figure; <span class="comment">% open a new figure window</span>
+plot(X, y, <span class="string">'rx'</span>, <span class="string">'MarkerSize'</span>, 10); <span class="comment">% Plot the data</span>
+ylabel(<span class="string">'Profit in $10,000s'</span>); <span class="comment">% Set the y axis label</span>
+xlabel(<span class="string">'Population of City in 10,000s'</span>); <span class="comment">% Set the x axis label</span>
+</pre><pre class="codeoutput">1. Loading and Plotting Data ...
+</pre><img vspace="5" hspace="5" src="./MachLearnInMATLAB_1_LinearRegression_files/MachLearnInMATLAB_1_LinearRegression_01.png" style="width:560px;height:420px;" alt=""> <h2 id="4">2.2: Gradient Descent</h2><pre class="codeinput">fprintf(<span class="string">'2. Running Gradient Descent ...\n'</span>)
+
+X = [ones(m, 1), data(:,1)]; <span class="comment">% Add a column of ones to x</span>
+theta = zeros(2, 1); <span class="comment">% initialize fitting parameters</span>
+
+<span class="comment">% Some gradient descent settings</span>
+iterations = 1500;
+alpha = 0.01;
+
+<span class="comment">% compute and display initial cost</span>
+computeCost(X, y, theta)
+
+<span class="comment">% run gradient descent</span>
+theta = gradientDescent(X, y, theta, alpha, iterations);
+
+<span class="comment">% print theta to screen</span>
+fprintf(<span class="string">'Theta found by gradient descent: '</span>);
+fprintf(<span class="string">'%f %f \n'</span>, theta(1), theta(2));
+
+<span class="comment">% Plot the linear fit</span>
+hold <span class="string">on</span>; <span class="comment">% keep previous plot visible</span>
+plot(X(:,2), X*theta, <span class="string">'-'</span>)
+legend(<span class="string">'Training data'</span>, <span class="string">'Linear regression'</span>)
+hold <span class="string">off</span> <span class="comment">% don't overlay any more plots on this figure</span>
+
+<span class="comment">% Predict values for population sizes of 35,000 and 70,000</span>
+predict1 = [1, 3.5] *theta;
+fprintf(<span class="string">'For population = 35,000, we predict a profit of %f\n'</span>,<span class="keyword">...</span>
+    predict1*10000);
+predict2 = [1, 7] * theta;
+fprintf(<span class="string">'For population = 70,000, we predict a profit of %f\n'</span>,<span class="keyword">...</span>
+    predict2*10000);
+</pre><pre class="codeoutput">2. Running Gradient Descent ...
+
+ans =
+
+   32.0727
+
+Theta found by gradient descent: -3.630291 1.166362 
+For population = 35,000, we predict a profit of 4519.767868
+For population = 70,000, we predict a profit of 45342.450129
+</pre><img vspace="5" hspace="5" src="./MachLearnInMATLAB_1_LinearRegression_files/MachLearnInMATLAB_1_LinearRegression_02.png" style="width:560px;height:420px;" alt=""> <h2 id="5">2.3: Visualizing J(theta_0, theta_1)</h2><pre class="codeinput">fprintf(<span class="string">'Visualizing J(theta_0, theta_1) ...\n'</span>)
+
+<span class="comment">% Grid over which we will calculate J</span>
+theta0_vals = linspace(-10, 10, 100);
+theta1_vals = linspace(-1, 4, 100);
+
+<span class="comment">% initialize J_vals to a matrix of 0's</span>
+J_vals = zeros(length(theta0_vals), length(theta1_vals));
+
+<span class="comment">% Fill out J_vals</span>
+<span class="keyword">for</span> i = 1:length(theta0_vals)
+    <span class="keyword">for</span> j = 1:length(theta1_vals)
+	  t = [theta0_vals(i); theta1_vals(j)];
+	  J_vals(i,j) = computeCost(X, y, t);
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+
+<span class="comment">% Because of the way meshgrids work in the surf command, we need to</span>
+<span class="comment">% transpose J_vals before calling surf, or else the axes will be flipped</span>
+J_vals = J_vals';
+<span class="comment">% Surface plot</span>
+figure;
+surf(theta0_vals, theta1_vals, J_vals)
+xlabel(<span class="string">'\theta_0'</span>); ylabel(<span class="string">'\theta_1'</span>);
+
+<span class="comment">% Contour plot</span>
+figure;
+<span class="comment">% Plot J_vals as 15 contours spaced logarithmically between 0.01 and 100</span>
+contour(theta0_vals, theta1_vals, J_vals, logspace(-2, 3, 20))
+xlabel(<span class="string">'\theta_0'</span>); ylabel(<span class="string">'\theta_1'</span>);
+hold <span class="string">on</span>;
+plot(theta(1), theta(2), <span class="string">'rx'</span>, <span class="string">'MarkerSize'</span>, 10, <span class="string">'LineWidth'</span>, 2);
+</pre><pre class="codeoutput">Visualizing J(theta_0, theta_1) ...
+</pre><img vspace="5" hspace="5" src="./MachLearnInMATLAB_1_LinearRegression_files/MachLearnInMATLAB_1_LinearRegression_03.png" style="width:560px;height:420px;" alt=""> <img vspace="5" hspace="5" src="./MachLearnInMATLAB_1_LinearRegression_files/MachLearnInMATLAB_1_LinearRegression_04.png" style="width:560px;height:420px;" alt=""> <h2 id="6">3 LINEAR REGRESSION WITH MULTIPLE VARIABLES</h2><h2 id="7">3.1 Feature Normalization</h2><pre class="codeinput">clear ; close <span class="string">all</span>; clc
+<span class="comment">% Load Data</span>
+fprintf(<span class="string">'Loading data ...\n'</span>);
+data = load(<span class="string">'data2.txt'</span>);
+X = data(:, 1:2);
+y = data(:, 3);
+m = length(y);
+
+<span class="comment">% Print out some data points</span>
+fprintf(<span class="string">'First 10 examples from the dataset: \n'</span>);
+fprintf(<span class="string">' x = [%.0f %.0f], y = %.0f \n'</span>, [X(1:10,:) y(1:10,:)]');
+
+<span class="comment">% Scale features and set them to zero mean</span>
+fprintf(<span class="string">'Normalizing Features ...\n'</span>);
+[X, mu, sigma] = featureNormalize(X);
+
+<span class="comment">% Add intercept term to X</span>
+X = [ones(m, 1) X];
+</pre><pre class="codeoutput">Loading data ...
+First 10 examples from the dataset: 
+ x = [2104 3], y = 399900 
+ x = [1600 3], y = 329900 
+ x = [2400 3], y = 369000 
+ x = [1416 2], y = 232000 
+ x = [3000 4], y = 539900 
+ x = [1985 4], y = 299900 
+ x = [1534 3], y = 314900 
+ x = [1427 3], y = 198999 
+ x = [1380 3], y = 212000 
+ x = [1494 3], y = 242500 
+Normalizing Features ...
+</pre><h2 id="8">3.2 Gradient Descent</h2><pre class="codeinput">fprintf(<span class="string">'Running gradient descent ...\n'</span>);
+
+<span class="comment">% Choose some alpha value</span>
+alpha = 0.9;
+num_iters = 400;
+
+<span class="comment">% Init Theta and Run Gradient Descent</span>
+theta = zeros(3, 1);
+[theta, J_history] = gradientDescent(X, y, theta, alpha, num_iters);
+
+<span class="comment">% Plot the convergence graph</span>
+plot(1:numel(J_history), J_history, <span class="string">'-b'</span>, <span class="string">'LineWidth'</span>, 2);
+xlabel(<span class="string">'Number of iterations'</span>);
+ylabel(<span class="string">'Cost J'</span>);
+hold <span class="string">on</span>
+<span class="comment">% Display gradient descent's result</span>
+fprintf(<span class="string">'Theta computed from gradient descent: \n'</span>);
+fprintf(<span class="string">' %f \n'</span>, theta);
+fprintf(<span class="string">'\n'</span>);
+
+<span class="comment">% Estimate the price of a 1650 sq-ft, 3 br house</span>
+newX=[1650 3];
+newX=(newX-mu)./sigma;
+newX=[1 newX];
+price = newX*theta;
+
+fprintf([<span class="string">'Predicted price of a 1650 sq-ft, 3 br house '</span> <span class="keyword">...</span>
+         <span class="string">'(using gradient descent):\n $%f\n'</span>], price);
+</pre><pre class="codeoutput">Running gradient descent ...
+Theta computed from gradient descent: 
+ 340412.659574 
+ 110631.050279 
+ -6649.474271 
+
+Predicted price of a 1650 sq-ft, 3 br house (using gradient descent):
+ $293081.464335
+</pre><img vspace="5" hspace="5" src="./MachLearnInMATLAB_1_LinearRegression_files/MachLearnInMATLAB_1_LinearRegression_05.png" style="width:560px;height:420px;" alt=""> <h2 id="9">3.3 Normal Equations</h2><pre class="codeinput">fprintf(<span class="string">'Solving with normal equations...\n'</span>);
+data = csvread(<span class="string">'data2.txt'</span>);
+X = data(:, 1:2);
+y = data(:, 3);
+m = length(y);
+
+<span class="comment">% Add intercept term to X</span>
+X = [ones(m, 1) X];
+
+<span class="comment">% Calculate the parameters from the normal equation</span>
+theta = normalEqn(X, y);
+
+<span class="comment">% Display normal equation's result</span>
+fprintf(<span class="string">'Theta computed from the normal equations: \n'</span>);
+fprintf(<span class="string">' %f \n'</span>, theta);
+fprintf(<span class="string">'\n'</span>);
+
+
+<span class="comment">% Estimate the price of a 1650 sq-ft, 3 br house</span>
+newX=[1 1650 3];
+price = newX*theta; <span class="comment">% You should change this</span>
+fprintf([<span class="string">'Predicted price of a 1650 sq-ft, 3 br house '</span> <span class="keyword">...</span>
+         <span class="string">'(using normal equations):\n $%f\n'</span>], price);
+</pre><pre class="codeoutput">Solving with normal equations...
+Theta computed from the normal equations: 
+ 89597.909543 
+ 139.210674 
+ -8738.019112 
+
+Predicted price of a 1650 sq-ft, 3 br house (using normal equations):
+ $293081.464335
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB® R2016b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Machine Learning implemented in MATLAB - Notebook 1: Linear Regression
+%
+% _Author:_ Alberto Ibarrondo |
+% _Date:_ 20/03/2017 |
+% _License:_ MIT Free software
+%
+
+
+
+%% 1 INTRODUCTION
+% The objective of this first notebook is to implement a Linear Regression
+% model in MATLAB and apply it on a dataset. 
+% 
+% *Files included with this notebook*
+%
+% * MachLearnInMATLAB_1_LinearRegression.m - implementation MATLAB script
+% * data1.txt - Dataset for linear regression with one variable 
+% * data2.txt - Dataset for linear regression with multiple variables
+% * computeCost.m - Function to compute the cost of linear regression
+% * gradientDescent.m - Function to run gradient descent
+% * featureNormalize.m - Function to normalize features
+% * normalEqn.m - Function to compute the normal equations
+%
+
+%% 2 LINEAR REGRESSION WITH ONE VARIABLE
+
+%% 2.1: Loading & Plotting
+% x refers to the population size in 10,000s
+% y refers to the profit in $10,000s
+
+clear ; close all; clc
+fprintf('1. Loading and Plotting Data ...\n')
+data = load('data1.txt');
+X = data(:, 1); y = data(:, 2);
+m = length(y); % number of training examples
+
+% Plot Data
+figure; % open a new figure window
+plot(X, y, 'rx', 'MarkerSize', 10); % Plot the data
+ylabel('Profit in $10,000s'); % Set the y axis label
+xlabel('Population of City in 10,000s'); % Set the x axis label
+
+%% 2.2: Gradient Descent
+fprintf('2. Running Gradient Descent ...\n')
+
+X = [ones(m, 1), data(:,1)]; % Add a column of ones to x
+theta = zeros(2, 1); % initialize fitting parameters
+
+% Some gradient descent settings
+iterations = 1500;
+alpha = 0.01;
+
+% compute and display initial cost
+computeCost(X, y, theta)
+
+% run gradient descent
+theta = gradientDescent(X, y, theta, alpha, iterations);
+
+% print theta to screen
+fprintf('Theta found by gradient descent: ');
+fprintf('%f %f \n', theta(1), theta(2));
+
+% Plot the linear fit
+hold on; % keep previous plot visible
+plot(X(:,2), X*theta, '-')
+legend('Training data', 'Linear regression')
+hold off % don't overlay any more plots on this figure
+
+% Predict values for population sizes of 35,000 and 70,000
+predict1 = [1, 3.5] *theta;
+fprintf('For population = 35,000, we predict a profit of %f\n',...
+    predict1*10000);
+predict2 = [1, 7] * theta;
+fprintf('For population = 70,000, we predict a profit of %f\n',...
+    predict2*10000);
+
+%% 2.3: Visualizing J(theta_0, theta_1)
+fprintf('Visualizing J(theta_0, theta_1) ...\n')
+
+% Grid over which we will calculate J
+theta0_vals = linspace(-10, 10, 100);
+theta1_vals = linspace(-1, 4, 100);
+
+% initialize J_vals to a matrix of 0's
+J_vals = zeros(length(theta0_vals), length(theta1_vals));
+
+% Fill out J_vals
+for i = 1:length(theta0_vals)
+    for j = 1:length(theta1_vals)
+	  t = [theta0_vals(i); theta1_vals(j)];    
+	  J_vals(i,j) = computeCost(X, y, t);
+    end
+end
+
+
+% Because of the way meshgrids work in the surf command, we need to 
+% transpose J_vals before calling surf, or else the axes will be flipped
+J_vals = J_vals';
+% Surface plot
+figure;
+surf(theta0_vals, theta1_vals, J_vals)
+xlabel('\theta_0'); ylabel('\theta_1');
+
+% Contour plot
+figure;
+% Plot J_vals as 15 contours spaced logarithmically between 0.01 and 100
+contour(theta0_vals, theta1_vals, J_vals, logspace(-2, 3, 20))
+xlabel('\theta_0'); ylabel('\theta_1');
+hold on;
+plot(theta(1), theta(2), 'rx', 'MarkerSize', 10, 'LineWidth', 2);
+
+%% 3 LINEAR REGRESSION WITH MULTIPLE VARIABLES
+
+%% 3.1 Feature Normalization
+
+clear ; close all; clc
+% Load Data
+fprintf('Loading data ...\n'); 
+data = load('data2.txt');
+X = data(:, 1:2);
+y = data(:, 3);
+m = length(y);
+
+% Print out some data points
+fprintf('First 10 examples from the dataset: \n');
+fprintf(' x = [%.0f %.0f], y = %.0f \n', [X(1:10,:) y(1:10,:)]');
+
+% Scale features and set them to zero mean
+fprintf('Normalizing Features ...\n');
+[X, mu, sigma] = featureNormalize(X);
+
+% Add intercept term to X
+X = [ones(m, 1) X];
+
+
+%% 3.2 Gradient Descent
+fprintf('Running gradient descent ...\n');
+
+% Choose some alpha value
+alpha = 0.9;
+num_iters = 400;
+
+% Init Theta and Run Gradient Descent 
+theta = zeros(3, 1);
+[theta, J_history] = gradientDescent(X, y, theta, alpha, num_iters);
+
+% Plot the convergence graph
+plot(1:numel(J_history), J_history, '-b', 'LineWidth', 2);
+xlabel('Number of iterations');
+ylabel('Cost J');
+hold on
+% Display gradient descent's result
+fprintf('Theta computed from gradient descent: \n');
+fprintf(' %f \n', theta);
+fprintf('\n');
+
+% Estimate the price of a 1650 sq-ft, 3 br house
+newX=[1650 3];
+newX=(newX-mu)./sigma;
+newX=[1 newX];
+price = newX*theta;
+
+fprintf(['Predicted price of a 1650 sq-ft, 3 br house ' ...
+         '(using gradient descent):\n $%f\n'], price);
+
+%% 3.3 Normal Equations
+
+fprintf('Solving with normal equations...\n');
+data = csvread('data2.txt');
+X = data(:, 1:2);
+y = data(:, 3);
+m = length(y);
+
+% Add intercept term to X
+X = [ones(m, 1) X];
+
+% Calculate the parameters from the normal equation
+theta = normalEqn(X, y);
+
+% Display normal equation's result
+fprintf('Theta computed from the normal equations: \n');
+fprintf(' %f \n', theta);
+fprintf('\n');
+
+
+% Estimate the price of a 1650 sq-ft, 3 br house
+newX=[1 1650 3];
+price = newX*theta; % You should change this
+fprintf(['Predicted price of a 1650 sq-ft, 3 br house ' ...
+         '(using normal equations):\n $%f\n'], price);
+
+
+##### SOURCE END #####
+--></body></html>

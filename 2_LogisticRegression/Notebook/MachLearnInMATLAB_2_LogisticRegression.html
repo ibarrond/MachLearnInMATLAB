@@ -1,0 +1,424 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- saved from url=(0148)file:///C:/Users/AlbertoIbarrondo/Documents/MachineLearningInMATLAB/2_LogisticRegression/SourceCode/html/MachLearnInMATLAB_2_LogisticRegression.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Machine Learning implemented in MATLAB - Notebook 2: Logistic Regression</title><meta name="generator" content="MATLAB 9.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-05-03"><meta name="DC.source" content="MachLearnInMATLAB_2_LogisticRegression.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Machine Learning implemented in MATLAB - Notebook 2: Logistic Regression</h1><!--introduction--><p><i>Author:</i> Alberto Ibarrondo <b>|</b> <i>Date:</i> 25/04/2017 <b>|</b> <i>License:</i> MIT Free software</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="file:///C:/Users/AlbertoIbarrondo/Documents/MachineLearningInMATLAB/2_LogisticRegression/SourceCode/html/MachLearnInMATLAB_2_LogisticRegression.html#1">1 INTRODUCTION</a></li><li><a href="file:///C:/Users/AlbertoIbarrondo/Documents/MachineLearningInMATLAB/2_LogisticRegression/SourceCode/html/MachLearnInMATLAB_2_LogisticRegression.html#2">2 LOGISTIC REGRESSION</a></li><li><a href="file:///C:/Users/AlbertoIbarrondo/Documents/MachineLearningInMATLAB/2_LogisticRegression/SourceCode/html/MachLearnInMATLAB_2_LogisticRegression.html#3">2.1 Loading and Visualizing Data</a></li><li><a href="file:///C:/Users/AlbertoIbarrondo/Documents/MachineLearningInMATLAB/2_LogisticRegression/SourceCode/html/MachLearnInMATLAB_2_LogisticRegression.html#5">2.2 Cost and Gradient</a></li><li><a href="file:///C:/Users/AlbertoIbarrondo/Documents/MachineLearningInMATLAB/2_LogisticRegression/SourceCode/html/MachLearnInMATLAB_2_LogisticRegression.html#6">2.3 Optimization with fminunc</a></li><li><a href="file:///C:/Users/AlbertoIbarrondo/Documents/MachineLearningInMATLAB/2_LogisticRegression/SourceCode/html/MachLearnInMATLAB_2_LogisticRegression.html#7">2.4 Prediction and Accuracies</a></li><li><a href="file:///C:/Users/AlbertoIbarrondo/Documents/MachineLearningInMATLAB/2_LogisticRegression/SourceCode/html/MachLearnInMATLAB_2_LogisticRegression.html#8">3. REGULARIZATION IN LOGISTIC REGRESSION</a></li><li><a href="file:///C:/Users/AlbertoIbarrondo/Documents/MachineLearningInMATLAB/2_LogisticRegression/SourceCode/html/MachLearnInMATLAB_2_LogisticRegression.html#9">3.1 Loading and Visualizing Data</a></li><li><a href="file:///C:/Users/AlbertoIbarrondo/Documents/MachineLearningInMATLAB/2_LogisticRegression/SourceCode/html/MachLearnInMATLAB_2_LogisticRegression.html#10">3.2 Regularized Logistinc Regression</a></li><li><a href="file:///C:/Users/AlbertoIbarrondo/Documents/MachineLearningInMATLAB/2_LogisticRegression/SourceCode/html/MachLearnInMATLAB_2_LogisticRegression.html#11">3.3 Regularization Model Selection based on Accuracy</a></li></ul></div><h2 id="1">1 INTRODUCTION</h2><p>The objective of this notebook is to implement logistic regression with regularization and apply it to two different datasets.</p><p><b>Files included with this notebook</b></p><div><ul><li><i>MachLearnInMATLAB_2_LogisticRegression.m</i> - MATLAB script for the whole implementation of the study. The script sets up the dataset for the problems and makes calls to the rest of the functions. The first part of the study implements logistic regression with two variables, while the second part covers logist regression with multiple variables and regularization.</li><li><i>data1.txt</i> – Training set for the logistic regression</li><li><i>data2.txt</i> – Training set for the log. regression with regularization</li><li><i>computeCost.m</i> - Function to compute the cost of logistic regression</li><li><i>costFunctionReg.m</i> - Regularized Logistic Regression Cost</li><li><i>mapFeature.m</i> - Function to generate polynomial features</li><li><i>sigmoid.m</i> - Implementation of Sigmoid Function</li><li><i>plotLogReg.m</i> - Plot the data with 2 parameters and labels 0/1</li><li><i>plotDecisionBoundary.m</i> - Plot the decision boundary as well</li></ul></div><h2 id="2">2 LOGISTIC REGRESSION</h2><h2 id="3">2.1 Loading and Visualizing Data</h2><p><b>Load Data</b></p><div><ul><li>X are two columns with the exam scores</li><li>y is the label (1 is accepted, 0 is not accepted)</li></ul></div><pre class="codeinput">clear ; close <span class="string">all</span>; clc
+data = load(<span class="string">'data1.txt'</span>);
+X = data(:, [1, 2]);
+y = data(:, 3);
+[m, n] = size(X); <span class="comment">% number of training examples = 100</span>
+
+fprintf(<span class="string">'2.1 Loading and Visualizing Data ...\n'</span>)
+fprintf(<span class="string">'    Data Size: '</span>); fprintf(<span class="string">'%d '</span>, [m, n]); fprintf(<span class="string">'\n'</span>)
+</pre><pre class="codeoutput">2.1 Loading and Visualizing Data ...
+    Data Size: 100 2 
+</pre><p><b>Plot Data</b></p><pre class="codeinput">plotLogReg(X,y)
+xlabel(<span class="string">'Exam 1 score'</span>)
+ylabel(<span class="string">'Exam 2 score'</span>)
+legend(<span class="string">'Admitted'</span>, <span class="string">'Not admitted'</span>)
+</pre><img vspace="5" hspace="5" src="./MachLearnInMATLAB_2_LogisticRegression_files/MachLearnInMATLAB_2_LogisticRegression_01.png" style="width:560px;height:420px;" alt=""> <h2 id="5">2.2 Cost and Gradient</h2><pre class="codeinput">X = [ones(m, 1) X];             <span class="comment">% Add intercept term to x and X_test</span>
+init_theta = zeros(n + 1, 1);   <span class="comment">% Initialize fitting parameters</span>
+
+<span class="comment">% Compute and display initial cost and gradient</span>
+[cost, grad] = costFunction(init_theta, X, y);
+
+fprintf(<span class="string">'2.2 Cost at initial theta (zeros): %f\n'</span>, cost);
+fprintf(<span class="string">'    Gradient at initial theta (zeros): %f\n'</span>, grad);
+</pre><pre class="codeoutput">2.2 Cost at initial theta (zeros): 0.693147
+    Gradient at initial theta (zeros): -0.100000
+    Gradient at initial theta (zeros): -12.009217
+    Gradient at initial theta (zeros): -11.262842
+</pre><h2 id="6">2.3 Optimization with fminunc</h2><pre class="codeinput">opts = optimset(<span class="string">'GradObj'</span>, <span class="string">'on'</span>, <span class="string">'MaxIter'</span>, 400);    <span class="comment">%Set options</span>
+
+<span class="comment">%  Convex optim to obtain the optimal theta</span>
+[theta, cost] = <span class="keyword">...</span>
+	fminunc(@(t)(costFunction(t, X, y)), init_theta, opts);
+
+<span class="comment">% Print theta to screen</span>
+fprintf(<span class="string">'2.3 Cost at theta found by fminunc: %f\n'</span>, cost);
+fprintf(<span class="string">'    theta: %f\n'</span>, theta);
+
+<span class="comment">% Plot Boundary</span>
+plotDecisionBoundary(theta, X, y);
+xlabel(<span class="string">'Exam 1 score'</span>)
+ylabel(<span class="string">'Exam 2 score'</span>)
+legend(<span class="string">'Admitted'</span>, <span class="string">'Not admitted'</span>)
+</pre><pre class="codeoutput">Local minimum possible.
+
+fminunc stopped because the final change in function value relative to 
+its initial value is less than the default value of the function tolerance.
+
+
+
+2.3 Cost at theta found by fminunc: 0.203506
+    theta: -24.932982
+    theta: 0.204408
+    theta: 0.199618
+</pre><img vspace="5" hspace="5" src="./MachLearnInMATLAB_2_LogisticRegression_files/MachLearnInMATLAB_2_LogisticRegression_02.png" style="width:560px;height:420px;" alt=""> <h2 id="7">2.4 Prediction and Accuracies</h2><pre>We use the logistic regression model to predict the probability that a
+student with score 45 on exam 1 and score 85 on exam 2 will be admitted.</pre><pre>Furthermore, we compute the training &amp; test set accuracies of our model.</pre><pre class="codeinput">examScores = [45, 85];
+prob = sigmoid([1 examScores] * theta);
+fprintf(<span class="string">'2.4 Student [45, 85] -&gt; p(admission) = %f\n'</span>, prob);
+
+<span class="comment">% Compute accuracy on our training set</span>
+prediction = (sigmoid(X*theta)&gt;=0.5);
+accuracy = mean(double(prediction == y)) * 100;
+fprintf(<span class="string">'    Train Accuracy: %f\n'</span>, accuracy);
+</pre><pre class="codeoutput">2.4 Student [45, 85] -&gt; p(admission) = 0.774323
+    Train Accuracy: 89.000000
+</pre><h2 id="8">3. REGULARIZATION IN LOGISTIC REGRESSION</h2><h2 id="9">3.1 Loading and Visualizing Data</h2><p><b>Load Data</b>  * X are two columns with two features  * y is the label (1 is accepted, 0 is not accepted)</p><pre class="codeinput">data = load(<span class="string">'data2.txt'</span>);
+X = data(:, [1, 2]);
+y = data(:, 3);
+[m, n] = size(X);
+
+fprintf(<span class="string">'3.1 Loading and Visualizing Data ...\n'</span>)
+fprintf(<span class="string">'    Data Size: '</span>); fprintf(<span class="string">'%d '</span>, [m, n]); fprintf(<span class="string">'\n'</span>)
+
+<span class="comment">% *Plot Data*</span>
+plotLogReg(X, y);
+xlabel(<span class="string">'Microchip Test 1'</span>)
+ylabel(<span class="string">'Microchip Test 2'</span>)
+legend(<span class="string">'y = 1'</span>, <span class="string">'y = 0'</span>)
+</pre><pre class="codeoutput">3.1 Loading and Visualizing Data ...
+    Data Size: 118 2 
+</pre><img vspace="5" hspace="5" src="./MachLearnInMATLAB_2_LogisticRegression_files/MachLearnInMATLAB_2_LogisticRegression_03.png" style="width:560px;height:420px;" alt=""> <h2 id="10">3.2 Regularized Logistinc Regression</h2><pre>In this part we are given a dataset with data points that are not
+linearly separable. However, we can still use logistic regression
+to classify the data points.</pre><pre>To do so, we introduce more features to use - in particular polynomial
+features to our data matrix (similar to polynomial regression).</pre><pre class="codeinput">X = mapFeature(X(:,1), X(:,2), 6);  <span class="comment">% Add features, including bias term</span>
+init_theta = zeros(size(X, 2), 1);  <span class="comment">% Initialize fitting parameters</span>
+
+<span class="comment">% Set regularization parameter lambda to 1</span>
+lambda = 1;
+
+<span class="comment">% Compute initial cost and gradient for regularized logistic regression</span>
+[cost, grad] = costFunctionReg(init_theta, X, y, lambda);
+
+fprintf(<span class="string">'3.2 Cost at initial theta (zeros): %f\n'</span>, cost);
+</pre><pre class="codeoutput">3.2 Cost at initial theta (zeros): 0.693147
+</pre><h2 id="11">3.3 Regularization Model Selection based on Accuracy</h2><p>In this last section we try with several values for lambda and choose the best one.</p><pre class="codeinput">fprintf(<span class="string">'3.3 Model selection. Trying several lambdas\n'</span>);
+
+init_theta = zeros(size(X, 2), 1);      <span class="comment">% Initialize fitting parameters</span>
+opts = optimset(<span class="string">'GradObj'</span>, <span class="string">'on'</span>, <span class="string">'MaxIter'</span>, 400);   <span class="comment">% Set Options</span>
+
+<span class="keyword">for</span> lambda = [0.0001 0.001 0.01 0.1 1 10]
+
+    [theta, J, exit_flag] = <span class="keyword">...</span><span class="comment">                         % Optimize</span>
+        fminunc(@(t)(costFunctionReg(t, X, y, lambda)), init_theta, opts);
+
+    <span class="comment">% Plot Boundary</span>
+    <span class="comment">%subplot(2,3,log10(lambda)+5)</span>
+    figure
+    hold <span class="string">on</span>
+    plotDecisionBoundary(theta, X, y); hold <span class="string">on</span>;
+
+    xlabel(<span class="string">'Microchip Test 1'</span>)
+    ylabel(<span class="string">'Microchip Test 2'</span>)
+    legend(<span class="string">'y = 1'</span>, <span class="string">'y = 0'</span>, <span class="string">'Decision boundary'</span>)
+
+    <span class="comment">% Compute accuracy on our training set</span>
+    prediction = (sigmoid(X*theta)&gt;=0.5);
+    accuracy = mean(double(prediction == y)) * 100;
+    fprintf(<span class="string">'    Train Accuracy: %f\n'</span>, accuracy);
+    title(sprintf(<span class="string">'lambda = %g, Acc = %.2f'</span>, lambda, accuracy))
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">3.3 Model selection. Trying several lambdas
+
+Local minimum possible.
+
+fminunc stopped because the final change in function value relative to 
+its initial value is less than the default value of the function tolerance.
+
+
+
+    Train Accuracy: 87.288136
+
+Local minimum possible.
+
+fminunc stopped because the final change in function value relative to 
+its initial value is less than the default value of the function tolerance.
+
+
+
+    Train Accuracy: 85.593220
+
+Local minimum found.
+
+Optimization completed because the size of the gradient is less than
+the default value of the optimality tolerance.
+
+
+
+    Train Accuracy: 83.898305
+
+Local minimum possible.
+
+fminunc stopped because the final change in function value relative to 
+its initial value is less than the default value of the function tolerance.
+
+
+
+    Train Accuracy: 83.898305
+
+Local minimum possible.
+
+fminunc stopped because the final change in function value relative to 
+its initial value is less than the default value of the function tolerance.
+
+
+
+    Train Accuracy: 83.050847
+
+Local minimum possible.
+
+fminunc stopped because the final change in function value relative to 
+its initial value is less than the default value of the function tolerance.
+
+
+
+    Train Accuracy: 74.576271
+</pre><img vspace="5" hspace="5" src="./MachLearnInMATLAB_2_LogisticRegression_files/MachLearnInMATLAB_2_LogisticRegression_04.png" style="width:560px;height:420px;" alt=""> <img vspace="5" hspace="5" src="./MachLearnInMATLAB_2_LogisticRegression_files/MachLearnInMATLAB_2_LogisticRegression_05.png" style="width:560px;height:420px;" alt=""> <img vspace="5" hspace="5" src="./MachLearnInMATLAB_2_LogisticRegression_files/MachLearnInMATLAB_2_LogisticRegression_06.png" style="width:560px;height:420px;" alt=""> <img vspace="5" hspace="5" src="./MachLearnInMATLAB_2_LogisticRegression_files/MachLearnInMATLAB_2_LogisticRegression_07.png" style="width:560px;height:420px;" alt=""> <img vspace="5" hspace="5" src="./MachLearnInMATLAB_2_LogisticRegression_files/MachLearnInMATLAB_2_LogisticRegression_08.png" style="width:560px;height:420px;" alt=""> <img vspace="5" hspace="5" src="./MachLearnInMATLAB_2_LogisticRegression_files/MachLearnInMATLAB_2_LogisticRegression_09.png" style="width:560px;height:420px;" alt=""> <p>Based on our results, the best choice is lambda = 0.0001, although we should be aware of overfitting</p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB® R2016b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Machine Learning implemented in MATLAB - Notebook 2: Logistic Regression
+%
+% _Author:_ Alberto Ibarrondo *|*
+% _Date:_ 25/04/2017 *|*
+% _License:_ MIT Free software
+%
+
+
+%% 1 INTRODUCTION
+% The objective of this notebook is to implement logistic regression with 
+% regularization and apply it to two different datasets.
+% 
+% *Files included with this notebook*
+%
+% * _MachLearnInMATLAB_2_LogisticRegression.m_ - MATLAB script for the whole 
+% implementation of the study. The script sets up the dataset for the 
+% problems and makes calls to the rest of the functions. The first part of 
+% the study implements logistic regression with two variables, while the 
+% second part covers logist regression with multiple variables and 
+% regularization.
+% * _data1.txt_ – Training set for the logistic regression
+% * _data2.txt_ – Training set for the log. regression with regularization
+% * _computeCost.m_ - Function to compute the cost of logistic regression 
+% * _costFunctionReg.m_ - Regularized Logistic Regression Cost
+% * _mapFeature.m_ - Function to generate polynomial features
+% * _sigmoid.m_ - Implementation of Sigmoid Function
+% * _plotLogReg.m_ - Plot the data with 2 parameters and labels 0/1
+% * _plotDecisionBoundary.m_ - Plot the decision boundary as well
+%
+
+%% 2 LOGISTIC REGRESSION
+
+%% 2.1 Loading and Visualizing Data
+% *Load Data*
+%
+% * X are two columns with the exam scores 
+% * y is the label (1 is accepted, 0 is not accepted)
+%
+
+clear ; close all; clc
+data = load('data1.txt');
+X = data(:, [1, 2]);
+y = data(:, 3);
+[m, n] = size(X); % number of training examples = 100
+
+fprintf('2.1 Loading and Visualizing Data ...\n')
+fprintf('    Data Size: '); fprintf('%d ', [m, n]); fprintf('\n')
+%%
+% *Plot Data*
+%
+plotLogReg(X,y)
+xlabel('Exam 1 score')
+ylabel('Exam 2 score')
+legend('Admitted', 'Not admitted')
+
+%% 2.2 Cost and Gradient
+
+X = [ones(m, 1) X];             % Add intercept term to x and X_test
+init_theta = zeros(n + 1, 1);   % Initialize fitting parameters
+
+% Compute and display initial cost and gradient
+[cost, grad] = costFunction(init_theta, X, y);
+
+fprintf('2.2 Cost at initial theta (zeros): %f\n', cost);
+fprintf('    Gradient at initial theta (zeros): %f\n', grad);
+
+
+%% 2.3 Optimization with fminunc
+
+opts = optimset('GradObj', 'on', 'MaxIter', 400);    %Set options
+
+%  Convex optim to obtain the optimal theta
+[theta, cost] = ...
+	fminunc(@(t)(costFunction(t, X, y)), init_theta, opts);
+
+% Print theta to screen
+fprintf('2.3 Cost at theta found by fminunc: %f\n', cost);
+fprintf('    theta: %f\n', theta);
+
+% Plot Boundary
+plotDecisionBoundary(theta, X, y);
+xlabel('Exam 1 score')
+ylabel('Exam 2 score')
+legend('Admitted', 'Not admitted')
+
+
+%% 2.4 Prediction and Accuracies
+%  We use the logistic regression model to predict the probability that a
+%  student with score 45 on exam 1 and score 85 on exam 2 will be admitted.
+%
+%  Furthermore, we compute the training & test set accuracies of our model.
+
+examScores = [45, 85];
+prob = sigmoid([1 examScores] * theta);
+fprintf('2.4 Student [45, 85] -> p(admission) = %f\n', prob);
+
+% Compute accuracy on our training set
+prediction = (sigmoid(X*theta)>=0.5);
+accuracy = mean(double(prediction == y)) * 100;
+fprintf('    Train Accuracy: %f\n', accuracy);
+
+%% 3. REGULARIZATION IN LOGISTIC REGRESSION
+
+%% 3.1 Loading and Visualizing Data
+% *Load Data*
+%  * X are two columns with two features
+%  * y is the label (1 is accepted, 0 is not accepted)
+
+data = load('data2.txt');
+X = data(:, [1, 2]);
+y = data(:, 3);
+[m, n] = size(X);
+
+fprintf('3.1 Loading and Visualizing Data ...\n')
+fprintf('    Data Size: '); fprintf('%d ', [m, n]); fprintf('\n')
+
+% *Plot Data*
+plotLogReg(X, y);
+xlabel('Microchip Test 1')
+ylabel('Microchip Test 2')
+legend('y = 1', 'y = 0')
+
+%% 3.2 Regularized Logistinc Regression
+%  In this part we are given a dataset with data points that are not
+%  linearly separable. However, we can still use logistic regression
+%  to classify the data points. 
+%
+%  To do so, we introduce more features to use - in particular polynomial 
+%  features to our data matrix (similar to polynomial regression).
+%
+
+X = mapFeature(X(:,1), X(:,2), 6);  % Add features, including bias term
+init_theta = zeros(size(X, 2), 1);  % Initialize fitting parameters
+
+% Set regularization parameter lambda to 1
+lambda = 1;
+
+% Compute initial cost and gradient for regularized logistic regression
+[cost, grad] = costFunctionReg(init_theta, X, y, lambda);
+
+fprintf('3.2 Cost at initial theta (zeros): %f\n', cost);
+
+
+%% 3.3 Regularization Model Selection based on Accuracy
+% In this last section we try with several values for lambda and choose the
+% best one.
+
+fprintf('3.3 Model selection. Trying several lambdas\n');
+    
+init_theta = zeros(size(X, 2), 1);      % Initialize fitting parameters
+opts = optimset('GradObj', 'on', 'MaxIter', 400);   % Set Options
+    
+for lambda = [0.0001 0.001 0.01 0.1 1 10]
+
+    [theta, J, exit_flag] = ...                         % Optimize
+        fminunc(@(t)(costFunctionReg(t, X, y, lambda)), init_theta, opts);
+
+    % Plot Boundary
+    %subplot(2,3,log10(lambda)+5)
+    figure
+    hold on
+    plotDecisionBoundary(theta, X, y); hold on;
+    
+    xlabel('Microchip Test 1')
+    ylabel('Microchip Test 2')
+    legend('y = 1', 'y = 0', 'Decision boundary')
+
+    % Compute accuracy on our training set
+    prediction = (sigmoid(X*theta)>=0.5);
+    accuracy = mean(double(prediction == y)) * 100;
+    fprintf('    Train Accuracy: %f\n', accuracy);
+    title(sprintf('lambda = %g, Acc = %.2f', lambda, accuracy))
+end
+%%
+%
+% Based on our results, the best choice is lambda = 0.0001, although we
+% should be aware of overfitting
+%
+%
+
+##### SOURCE END #####
+--></body></html>
