@@ -1,10 +1,11 @@
 # MachLearnMATLAB
 ----------
 The objective of this repository is to implement a wide variety of Machine Learning algorithms and models in MATLAB.  
+
 | # | Notebook | Description |
 | --- |----------|-------------|
 |1|LinearRegression| ...|
-|2|LogisticRegression| Also implementing PCA|
+|2|LogisticRegression| First use of sigmoid |
 |3|NeuralNetworks| Over the well known MNIST dataset |
 
 All scripts follow a general structure:
