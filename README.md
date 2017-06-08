@@ -1,6 +1,6 @@
 # MachLearnMATLAB
 ----------
-The objective of this repository is to implement a wide variety of Machine Learning algorithms and models in MATLAB.  
+Implementation of a wide variety of Machine Learning algorithms and models in MATLAB.  
 
 | # | Notebook | Description |
 | --- |----------|-------------|
@@ -15,15 +15,15 @@ All scripts follow a general structure:
 4. Parameter tuning and further improvements
 
 ## Author
-Alberto IBARRONDO *@ibarrond*
+Alberto Ibarrondo Luis *@ibarrond*
 
 ## Details
-* _Language_: MATLAB(.m), M live scripts(.mlx)
+* _Language_: MATLAB(.m), MATLAB live scripts(.mlx)
 * _Execution_: local in MATLAB environment
 * _Libraries_: standard MATLAB, optimization (fminunc)
 
 ## Motivation
-Resurging interest in machine learning is due to the same factors that have made data mining and data science more popular than ever. Huge volumes and varieties of available data, cheaper and more powerful computational processing, and affordable data storage have made it one of the hottest topics nowadays.
+Resurging interest in machine learning is due to the same factors that have made data mining and data science more popular than ever. Huge volumes and varieties of available data, cheaper and more powerful computational processing, and affordable data storage have made it one of the hottest topics nowadays. Besides, MATLAB is the most important engineering tool there is. This repository combines them both
 
 ## Sources and acknowledgments
 The initial assignments come from the course in [Machine Learning](https://www.coursera.org/learn/machine-learning/home/welcome) taught in Coursera by [Andrew NG](http://www.andrewng.org/)
